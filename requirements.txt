@@ -1,0 +1,12 @@
+pytest
+pytest-asyncio
+pytest-cov
+
+boto3 == 1.35.72
+pydantic == 2.9.*
+datamodel-code-generator == 0.26.*
+
+
+
+black
+flake8

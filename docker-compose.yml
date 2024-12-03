@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app  # Mount the current directory to /app in the container
+    working_dir: /app
+    stdin_open: true  # Keep the container open for bash access
+    tty: true      
