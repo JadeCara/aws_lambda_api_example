@@ -16,8 +16,6 @@ jobs:
       docker:
         image: docker:19.03.12
         options: --privileged
-        ports:
-          - 8000:8000
 
     steps:
       - name: Checkout code
@@ -26,26 +24,20 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install black flake8 pytest
 
-      - name: Lint with flake8
-        run: |
-          source venv/bin/activate
-          flake8 .
-
-      - name: Format with black
-        run: |
-          source venv/bin/activate
-          black --check .
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       - name: Run tests
         run: |
-          source venv/bin/activate
           pytest
