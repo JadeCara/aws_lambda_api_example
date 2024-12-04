@@ -3,8 +3,11 @@ pytest-asyncio
 pytest-cov
 
 boto3 == 1.35.72
+fastapi == 0.115.*
+httpx == 0.28.*
 pydantic == 2.9.*
-datamodel-code-generator == 0.26.*
+mangum == 0.19.*
+uvicorn == 0.32.*
 
 
 
