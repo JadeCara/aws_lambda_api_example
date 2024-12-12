@@ -35,4 +35,4 @@ Use the `Makefile` command `make build`
 
 ### Making API Calls
 
-Curl Commands for all api calls can be found there or in the docstrings on the routes. 
+Curl Commands for all api calls can be found there on the docs page above or in the docstrings on the routes. This build also includes the openapi.json.
