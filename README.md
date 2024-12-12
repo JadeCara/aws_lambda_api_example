@@ -1,5 +1,7 @@
 ## Python AWS Lambda Setup With local run Option
 
+[![CI](https://github.com/JadeCara/aws_lambda_api_example/actions/workflows/ci.yml/badge.svg)](https://github.com/JadeCara/aws_lambda_api_example/actions/workflows/ci.yml)
+
 To run this locally you can either set up a local dynamodb instance, instructions [here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html).
 
 Or make a couple dynamodb tables to support the back end. I added the scripts I used to create these tables in the `app/awscli.sh` [file](https://github.com/JadeCara/aws_lambda_api_example/blob/a5569b2dd3500fcb24fb299388f1e08a85594296/app/awscli.sh)
