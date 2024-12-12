@@ -14,10 +14,23 @@ Create your dynamodb tables
 
 Navigate into the project directory
 
+### To run from the command line
+
 run ```sh uvicorn app.main:app --reload```
+
+
+### To run with Docker compose
+
+>[!TIP]
+> You will need access to the aws config variables through a .env file or using EXPORT from the command line
+
+Use the `Makefile` command `make build` 
+
+### Docs
 
 >[!TIP]
 > Once that is running docs can be found at http://127.0.0.1:8000/docs where they are kindly generated for us by FastApi using openapi. 
 
+### Making API Calls
 
 Curl Commands for all api calls can be found there or in the docstrings on the routes. 
