@@ -3,6 +3,8 @@ from pydantic import BaseModel
 import boto3
 from botocore.exceptions import ClientError
 
+from app.routes.users import is_existing_user_id
+
 router = APIRouter()
 
 # Initialize the DynamoDB client
@@ -15,6 +17,14 @@ class Post(BaseModel):
     title: str
     content: str
     author_id: str
+
+
+def is_existing_post_id(post_Id: str):
+    try:
+        response = table.scan(FilterExpression="Id = :i", ExpressionAttributeValues={":i": post_Id})
+        return len(response["Items"]) == 1
+    except ClientError as e:
+        raise HTTPException(status_code=500, detail=e.response["Error"]["Message"])
 
 
 @router.get("/")
@@ -72,6 +82,10 @@ def create_post(post: Post):
     ``{"message": "Post created"}``
     """
     try:
+        if not is_existing_user_id(post.author_id):
+            raise HTTPException(status_code=400, detail="Cannot create post for unknown User Id.")
+        if is_existing_post_id(post.Id):
+            raise HTTPException(status_code=400, detail="Cannot create post for duplicate Id.")
         table.put_item(Item={k: v for k, v in post.model_dump().items()})
 
         return {"message": "Post created"}
@@ -97,6 +111,8 @@ def update_post(Id: str, post: Post):
     ``{"message": "Post with id {Id} updated", "updated_attributes": {updated_attributes}}``
     """
     try:
+        if not is_existing_post_id(post.Id):
+            raise HTTPException(status_code=400, detail="Cannot update post for unknown Id.")
         response = table.update_item(
             Key={"Id": Id},
             UpdateExpression="set title=:t, content=:c, author_id=:a",
@@ -123,6 +139,8 @@ def delete_post(Id: str):
     ``{"message":"Post with id 1 deleted"}
     """
     try:
+        if not is_existing_post_id(Id):
+            raise HTTPException(status_code=400, detail="Cannot delete post for unknown Id.")
         table.delete_item(Key={"Id": Id})
         return {"message": f"Post with id {Id} deleted"}
     except ClientError as e:

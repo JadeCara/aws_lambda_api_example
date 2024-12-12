@@ -17,6 +17,36 @@ class User(BaseModel):
     email_address: str
 
 
+def is_existing_user_id(user_Id: str):
+    try:
+        response = table.scan(FilterExpression="Id = :i", ExpressionAttributeValues={":i": user_Id})
+        return len(response["Items"]) == 1
+    except ClientError as e:
+        raise HTTPException(status_code=500, detail=e.response["Error"]["Message"])
+
+
+def is_existing_user_name(user_name: str):
+    try:
+        response = table.scan(
+            FilterExpression="user_name = :u",
+            ExpressionAttributeValues={":u": user_name},
+        )
+        return len(response["Items"]) > 0
+    except ClientError as e:
+        raise HTTPException(status_code=500, detail=e.response["Error"]["Message"])
+
+
+def is_existing_email_address(email_address: str):
+    try:
+        response = table.scan(
+            FilterExpression="email_address = :e",
+            ExpressionAttributeValues={":e": email_address},
+        )
+        return len(response["Items"]) > 0
+    except ClientError as e:
+        raise HTTPException(status_code=500, detail=e.response["Error"]["Message"])
+
+
 @router.post("/")
 def create_user(user: User):
     """
@@ -33,6 +63,12 @@ def create_user(user: User):
     Response: ``{"message":"User created"}``
     """
     try:
+        # Check if user_name or email_address already exists
+        if is_existing_user_name(user.user_name):
+            raise HTTPException(status_code=400, detail="User name already exists")
+        if is_existing_email_address(user.email_address):
+            raise HTTPException(status_code=400, detail="Email address already exists")
+
         table.put_item(
             Item={
                 "Id": user.Id,
@@ -47,7 +83,7 @@ def create_user(user: User):
 
 
 @router.get("/{Id}")
-def read_user(Id: str):
+def read_user_by_id(Id: str):
     """
     Reads a user from the DynamoDB table "users" by Id
 
@@ -98,6 +134,8 @@ def update_user(Id: str, user: User):
     Response: ``{"message":"User with id 1 updated","updated_attributes": ...}``
     """
     try:
+        if not is_existing_user_id(Id):
+            raise HTTPException(status_code=400, detail="User Id not found.")
         response = table.update_item(
             Key={"Id": Id},
             UpdateExpression="set user_name=:u, password=:p, email_address=:e",
@@ -126,6 +164,8 @@ def delete_user(Id: str):
     Response: ``{"message":"User with id 1 deleted"}``
     """
     try:
+        if not is_existing_user_id(Id):
+            raise HTTPException(status_code=400, detail="User Id not found.")
         table.delete_item(Key={"Id": Id})
         return {"message": f"User with id {Id} deleted"}
     except ClientError as e:
