@@ -1,16 +1,9 @@
 import pytest
-from botocore.stub import Stubber
 
 from app.routes.users import table
 
 
-@pytest.fixture
-def mock_dynamodb():
-    with Stubber(table.meta.client) as stubber:
-        yield stubber
-        stubber.assert_no_pending_responses()
-
-
+@pytest.mark.parametrize("mock_dynamodb", [table], indirect=True)
 def test_read_users(client, mock_dynamodb):
     mock_dynamodb.add_response(
         "scan",
@@ -38,6 +31,7 @@ def test_read_users(client, mock_dynamodb):
     ]
 
 
+@pytest.mark.parametrize("mock_dynamodb", [table], indirect=True)
 def test_read_user(client, mock_dynamodb):
     mock_dynamodb.add_response(
         "get_item",
@@ -64,6 +58,7 @@ def test_read_user(client, mock_dynamodb):
     }
 
 
+@pytest.mark.parametrize("mock_dynamodb", [table], indirect=True)
 def test_create_user(client, mock_dynamodb):
     user_data = {
         "Id": "2",
@@ -79,6 +74,7 @@ def test_create_user(client, mock_dynamodb):
     assert response.json() == {"message": "User created"}
 
 
+@pytest.mark.parametrize("mock_dynamodb", [table], indirect=True)
 def test_update_user(client, mock_dynamodb):
     user_data = {
         "Id": "1",
@@ -107,6 +103,7 @@ def test_update_user(client, mock_dynamodb):
     assert response.json() == {"message": "User with id 1 updated", "updated_attributes": user_data}
 
 
+@pytest.mark.parametrize("mock_dynamodb", [table], indirect=True)
 def test_delete_user(client, mock_dynamodb):
     mock_dynamodb.add_response(
         "delete_item",
