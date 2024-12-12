@@ -6,5 +6,12 @@ services:
     volumes:
       - .:/app  # Mount the current directory to /app in the container
     working_dir: /app
+    ports:
+      - "8000:8000"  # Map port 8000 on the host to port 8000 in the container
     stdin_open: true  # Keep the container open for bash access
-    tty: true      
+    tty: true
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000     

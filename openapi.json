@@ -1,0 +1,547 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "FastAPI",
+      "version": "0.1.0"
+    },
+    "paths": {
+      "/users/": {
+        "get": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Read Users",
+          "description": "Reads all users from the DynamoDB table \"users\"\n\nExample call:\n``curl -X GET \"http://127.0.0.1:8000/users/\" -H \"accept: application/json\"``\n\nResponse: ``[{\"Id\": \"1\", \"user_name\": \"johndoe\", \"password\": \"password\", \"email_address\": ...``",
+          "operationId": "read_users_users__get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Create User",
+          "description": "Creates a new user in the DynamoDB table \"users\"\n\nExample call:\n``curl -X POST \"http://127.0.0.1:8000/users/\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d '{  # noqa E501\n  \"Id\": \"1\",\n  \"user_name\": \"johndoe\",\n  \"password\": \"password\",\n  \"email_address\": \"john@example.com\"\n}'``\n\nResponse: ``{\"message\":\"User created\"}``",
+          "operationId": "create_user_users__post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/users/{Id}": {
+        "get": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Read User",
+          "description": "Reads a user from the DynamoDB table \"users\" by Id\n\nExample call:\n``curl -X GET \"http://127.0.0.1:8000/users/1\" -H \"accept: application/json\"``\n\nResponse: ``{\"Id\": \"1\", \"user_name\": \"johndoe\", \"password\": ...``",
+          "operationId": "read_user_users__Id__get",
+          "parameters": [
+            {
+              "name": "Id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "title": "Id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Update User",
+          "description": "Updates a user in the DynamoDB table \"users\" by Id\n\nExample call:\n``curl -X PUT \"http://127.0.0.1:8000/users/{Id}\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d '{  # noqa E501\n  \"Id\": \"1\",\n  \"user_name\": \"johndoeupdated\",\n  \"password\": \"newpassword\",\n  \"email_address\": \"johnupdated@example.com\"\n}'\n\nResponse: ``{\"message\":\"User with id 1 updated\",\"updated_attributes\": ...}``",
+          "operationId": "update_user_users__Id__put",
+          "parameters": [
+            {
+              "name": "Id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "title": "Id"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "users"
+          ],
+          "summary": "Delete User",
+          "description": "Deletes a user from the DynamoDB table \"users\" by Id\n\nExample call: ``curl -X DELETE \"http://127.0.0.1:8000/users/1\" -H \"accept: application/json\"``\n\nResponse: ``{\"message\":\"User with id 1 deleted\"}``",
+          "operationId": "delete_user_users__Id__delete",
+          "parameters": [
+            {
+              "name": "Id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "title": "Id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/posts/": {
+        "get": {
+          "tags": [
+            "posts"
+          ],
+          "summary": "Read Posts",
+          "description": "Gets all posts from the DynamoDB table \"posts\"\n\nExample call:\n``curl -X GET \"http://127.0.0.1:8000/posts/\" -H \"accept: application/json\"``\n\nResponse:\n``[{\"Id\": \"1\", \"title\": \"First Post\", ... \"author_id\": \"1\"}]``",
+          "operationId": "read_posts_posts__get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "posts"
+          ],
+          "summary": "Create Post",
+          "description": "Creates a post in the DynamoDB table \"posts\"\n\nExample call:\n``curl -X POST \"http://127.0.0.1:8000/posts/\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d '{  # noqa E501\n  \"Id\": \"1\",\n  \"title\": \"First Post\",\n  \"content\": \"This is the first post\",\n  \"author_id\": \"1\"\n}'``\n\nResponse:\n``{\"message\": \"Post created\"}``",
+          "operationId": "create_post_posts__post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/posts/{Id}": {
+        "get": {
+          "tags": [
+            "posts"
+          ],
+          "summary": "Read Post",
+          "description": "Gets a post from the DynamoDB table \"posts\" by Id\n\nExample call:\n``curl -X GET \"http://127.0.0.1:8000/posts/1\" -H \"accept: application/json\"``\n\nResponse:\n``{\"content\":\"This is the first post\",\"author_id\":\"1\",\"Id\":\"1\",\"title\":\"First Post\"}``",
+          "operationId": "read_post_posts__Id__get",
+          "parameters": [
+            {
+              "name": "Id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "title": "Id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "posts"
+          ],
+          "summary": "Update Post",
+          "description": "Updates a post in the DynamoDB table \"posts\" by Id\n\nExample call:\n``curl -X PUT \"http://127.0.0.1:8000/posts/1\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d  # noqa E501\n'{\n    \"Id\": \"1\",\n    \"title\": \"Updated Post\",\n    \"content\": \"This is the updated post\",\n    \"author_id\": \"1\"\n}'\n\nResponse:\n``{\"message\": \"Post with id {Id} updated\", \"updated_attributes\": {updated_attributes}}``",
+          "operationId": "update_post_posts__Id__put",
+          "parameters": [
+            {
+              "name": "Id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "title": "Id"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "posts"
+          ],
+          "summary": "Delete Post",
+          "description": "Deletes a post from the DynamoDB table \"posts\" by Id\n\nExample call:\n``curl -X DELETE \"http://127.0.0.1:8000/posts/1\" -H \"accept: application/json\"``\n\nResponse:\n``{\"message\":\"Post with id 1 deleted\"}",
+          "operationId": "delete_post_posts__Id__delete",
+          "parameters": [
+            {
+              "name": "Id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "title": "Id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/": {
+        "get": {
+          "summary": "Read Root",
+          "description": "Root endpoint",
+          "operationId": "read_root__get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/health": {
+        "get": {
+          "summary": "Read Health",
+          "description": "Health check endpoint",
+          "operationId": "read_health_health_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "HTTPValidationError": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError"
+        },
+        "Post": {
+          "properties": {
+            "Id": {
+              "type": "string",
+              "title": "Id"
+            },
+            "title": {
+              "type": "string",
+              "title": "Title"
+            },
+            "content": {
+              "type": "string",
+              "title": "Content"
+            },
+            "author_id": {
+              "type": "string",
+              "title": "Author Id"
+            }
+          },
+          "type": "object",
+          "required": [
+            "Id",
+            "title",
+            "content",
+            "author_id"
+          ],
+          "title": "Post"
+        },
+        "User": {
+          "properties": {
+            "Id": {
+              "type": "string",
+              "title": "Id"
+            },
+            "user_name": {
+              "type": "string",
+              "title": "User Name"
+            },
+            "password": {
+              "type": "string",
+              "title": "Password"
+            },
+            "email_address": {
+              "type": "string",
+              "title": "Email Address"
+            }
+          },
+          "type": "object",
+          "required": [
+            "Id",
+            "user_name",
+            "password",
+            "email_address"
+          ],
+          "title": "User"
+        },
+        "ValidationError": {
+          "properties": {
+            "loc": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
+              },
+              "type": "array",
+              "title": "Location"
+            },
+            "msg": {
+              "type": "string",
+              "title": "Message"
+            },
+            "type": {
+              "type": "string",
+              "title": "Error Type"
+            }
+          },
+          "type": "object",
+          "required": [
+            "loc",
+            "msg",
+            "type"
+          ],
+          "title": "ValidationError"
+        }
+      }
+    }
+  }
